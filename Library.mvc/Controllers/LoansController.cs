@@ -64,8 +64,8 @@ namespace Library.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("BookId,MemberId,DueDate")] Loan loan)
         {
-            var isLoaned = await _context.Loans
-                .AnyAsync(l => l.BookId == loan.BookId && l.ReturnedDate == null);
+            var isLoaned = _context.Loans
+                .Any(l => l.BookId == loan.BookId && l.ReturnedDate == null);
 
             if (isLoaned)
             {
@@ -85,15 +85,16 @@ namespace Library.MVC.Controllers
 
                 _context.Loans.Add(loan);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
 
-            var availableBooks = await _context.Books
-                .Where(b => !_context.Loans.Any(l => l.BookId == b.Id && l.ReturnedDate == null))
-                .ToListAsync();
+            var availableBooks = _context.Books
+                .Where(b => !_context.Loans.Any(l => l.BookId == b.Id && l.ReturnedDate == null) || b.Id == loan.BookId)
+                .ToList();
 
             ViewData["BookId"] = new SelectList(availableBooks, "Id", "Title", loan.BookId);
-            ViewData["MemberId"] = new SelectList(await _context.Members.ToListAsync(), "Id", "FullName", loan.MemberId);
+            ViewData["MemberId"] = new SelectList(_context.Members, "Id", "FullName", loan.MemberId);
 
             return View(loan);
         }
