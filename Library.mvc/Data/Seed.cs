@@ -1,17 +1,15 @@
 ﻿using Library.domain.Models;
 using Library.mvc.Data;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Library.MVC.Data
 {
     public static class Seed
     {
-        public static void Initialize(ApplicationDbContext context)
+        public static async Task InitializeAsync(ApplicationDbContext context)
         {
-            if (context.Books.Any() || context.Members.Any() || context.Loans.Any())
+            if (await context.Books.AnyAsync() || await context.Members.AnyAsync() || await context.Loans.AnyAsync())
                 return;
 
             var books = new[]
@@ -38,8 +36,8 @@ namespace Library.MVC.Data
                 new Book { Title = "DevOps Handbook", Author = "Gene Kim", Isbn = "130", Category = "DevOps", IsAvailable = true }
             };
 
-            context.Books.AddRange(books);
-            context.SaveChanges();
+            await context.Books.AddRangeAsync(books);
+            await context.SaveChangesAsync();
 
             var members = new[]
             {
@@ -55,8 +53,8 @@ namespace Library.MVC.Data
                 new Member { FullName = "Jack White", Email = "jack@email.com", Phone = "0000" }
             };
 
-            context.Members.AddRange(members);
-            context.SaveChanges();
+            await context.Members.AddRangeAsync(members);
+            await context.SaveChangesAsync();
 
             var loans = new[]
             {
@@ -77,19 +75,21 @@ namespace Library.MVC.Data
                 new Loan { BookId = books[14].Id, MemberId = members[4].Id, LoanDate = DateTime.Now.AddDays(-8), DueDate = DateTime.Now.AddDays(-4), ReturnedDate = DateTime.Now.AddDays(-1) }
             };
 
-            context.Loans.AddRange(loans);
+            await context.Loans.AddRangeAsync(loans);
 
             foreach (var loan in loans)
             {
                 if (loan.ReturnedDate == null)
                 {
-                    var book = context.Books.Find(loan.BookId);
+                    var book = await context.Books.FindAsync(loan.BookId);
                     if (book != null)
+                    {
                         book.IsAvailable = false;
+                    }
                 }
             }
 
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
         public static async Task SeedAdminUserAndRolesAsync(
@@ -130,11 +130,6 @@ namespace Library.MVC.Data
                     await userManager.AddToRoleAsync(adminUser, adminRole);
                 }
             }
-        }
-
-        internal static async Task InitializeAsync(ApplicationDbContext context)
-        {
-            throw new NotImplementedException();
         }
     }
 }
