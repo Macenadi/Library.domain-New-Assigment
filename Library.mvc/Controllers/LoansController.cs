@@ -1,6 +1,7 @@
 ﻿using Library.domain.Models;
 using Library.mvc.Data;
 using Library.MVC.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Library.MVC.Controllers
 {
+    [Authorize]
     public class LoansController : Controller
     {
         private readonly ApplicationDbContext _context;

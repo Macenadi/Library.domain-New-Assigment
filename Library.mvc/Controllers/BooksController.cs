@@ -2,12 +2,14 @@
 using Library.mvc.Data;
 using Library.MVC.Data;
 using Library.MVC.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.MVC.Controllers
 {
+    [Authorize]
     public class BooksController : Controller
     {
         private readonly ApplicationDbContext _context;
