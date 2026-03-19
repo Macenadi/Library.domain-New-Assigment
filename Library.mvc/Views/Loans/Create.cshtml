@@ -4,43 +4,45 @@
     ViewData["Title"] = "Create Loan";
 }
 
-<h1>Create</h1>
+<div class="card card-soft">
+    <div class="card-body">
+        <h1 class="page-title">Create Loan</h1>
+        <hr />
 
-<h4>Loan</h4>
-<hr />
+        <div class="row">
+            <div class="col-md-8">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Create" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="mb-3">
+                        <label asp-for="BookId" class="form-label"></label>
+                        <select asp-for="BookId" class="form-select" asp-items="ViewBag.BookId">
+                            <option value="">-- Select Book --</option>
+                        </select>
+                        <span asp-validation-for="BookId" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="BookId" class="control-label"></label>
-                <select asp-for="BookId" class="form-control" asp-items="ViewBag.BookId">
-                    <option value="">-- Select Book --</option>
-                </select>
-                <span asp-validation-for="BookId" class="text-danger"></span>
+                    <div class="mb-3">
+                        <label asp-for="MemberId" class="form-label"></label>
+                        <select asp-for="MemberId" class="form-select" asp-items="ViewBag.MemberId">
+                            <option value="">-- Select Member --</option>
+                        </select>
+                        <span asp-validation-for="MemberId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DueDate" class="form-label"></label>
+                        <input asp-for="DueDate" class="form-control" type="datetime-local" />
+                        <span asp-validation-for="DueDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+                    </div>
+                </form>
             </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="MemberId" class="control-label"></label>
-                <select asp-for="MemberId" class="form-control" asp-items="ViewBag.MemberId">
-                    <option value="">-- Select Member --</option>
-                </select>
-                <span asp-validation-for="MemberId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="DueDate" class="control-label"></label>
-                <input asp-for="DueDate" class="form-control" type="datetime-local" />
-                <span asp-validation-for="DueDate" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 

@@ -2,21 +2,23 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="hero-box text-center mb-4">
+<div class="hero-box text-center mb-5">
     <h1>Community Library Desk</h1>
-    <p>Manage books, members, loans, and roles in one simple library system.</p>
+    <p class="mb-4">
+        A simple internal library system to manage books, members, loans, and role-based access.
+    </p>
 
     @if (User.Identity != null && User.Identity.IsAuthenticated)
     {
-        <div class="mt-4">
-            <a asp-controller="Books" asp-action="Index" class="btn btn-light btn-lg me-2">View Books</a>
-            <a asp-controller="Loans" asp-action="Index" class="btn btn-outline-light btn-lg">View Loans</a>
+        <div class="d-flex justify-content-center gap-2 flex-wrap">
+            <a asp-controller="Books" asp-action="Index" class="btn btn-light btn-lg">Browse Books</a>
+            <a asp-controller="Loans" asp-action="Index" class="btn btn-outline-light btn-lg">Manage Loans</a>
         </div>
     }
     else
     {
-        <div class="mt-4">
-            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-light btn-lg me-2">Login</a>
+        <div class="d-flex justify-content-center gap-2 flex-wrap">
+            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-light btn-lg">Login</a>
             <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-outline-light btn-lg">Register</a>
         </div>
     }
@@ -26,8 +28,14 @@
     <div class="col-md-4">
         <div class="card card-soft h-100">
             <div class="card-body">
-                <h4 class="card-title">Books</h4>
-                <p class="card-text">Search, filter, create, edit, and manage the library collection.</p>
+                <h4 class="card-title mb-3">Books</h4>
+                <p class="card-text text-muted">
+                    Search, filter, create, edit, and manage the library’s collection with a clean and simple workflow.
+                </p>
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    <a asp-controller="Books" asp-action="Index" class="btn btn-outline-primary">Open Books</a>
+                }
             </div>
         </div>
     </div>
@@ -35,8 +43,14 @@
     <div class="col-md-4">
         <div class="card card-soft h-100">
             <div class="card-body">
-                <h4 class="card-title">Members</h4>
-                <p class="card-text">Keep track of library members and their contact details.</p>
+                <h4 class="card-title mb-3">Members</h4>
+                <p class="card-text text-muted">
+                    Keep track of members, their contact details, and manage records in one place.
+                </p>
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    <a asp-controller="Members" asp-action="Index" class="btn btn-outline-primary">Open Members</a>
+                }
             </div>
         </div>
     </div>
@@ -44,9 +58,28 @@
     <div class="col-md-4">
         <div class="card card-soft h-100">
             <div class="card-body">
-                <h4 class="card-title">Loans</h4>
-                <p class="card-text">Create loans, return books, and monitor active or overdue items.</p>
+                <h4 class="card-title mb-3">Loans</h4>
+                <p class="card-text text-muted">
+                    Create loans, return books, and identify active or overdue items quickly.
+                </p>
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    <a asp-controller="Loans" asp-action="Index" class="btn btn-outline-primary">Open Loans</a>
+                }
             </div>
         </div>
     </div>
 </div>
+
+@if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <div class="card card-soft mt-4 border-start border-4 border-primary">
+        <div class="card-body">
+            <h4 class="card-title mb-2">Admin Access</h4>
+            <p class="text-muted mb-3">
+                Manage roles and control access for the system.
+            </p>
+            <a asp-controller="Admin" asp-action="Roles" class="btn btn-primary">Open Role Management</a>
+        </div>
+    </div>
+}
